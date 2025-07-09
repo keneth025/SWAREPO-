@@ -1,0 +1,11 @@
+.onecap-table.course {
+  .table-header, .table-row {
+    grid-template-columns: 30px 1fr 1fr 30px;
+  }
+}
+
+#course-action {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  justify-content: space-between;
+}

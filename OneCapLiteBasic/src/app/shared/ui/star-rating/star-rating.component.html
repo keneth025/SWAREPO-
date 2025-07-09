@@ -1,0 +1,15 @@
+<div class="rating"
+  (mouseleave)="resetValue()"[ngClass]="_size"
+>
+  <div class="rate-value"
+    *ngFor="let val of starArr"
+    (click)="updateValue()"
+    (mouseover)="checkValue(val)"
+  >
+    <span
+      [class]="'material-icons ' + _size"
+      [ngClass]="{ 'active': tempValue >= val }"
+    > star </span>
+    <span class="label" *ngIf="showValues"> {{ val }} </span>
+  </div>
+</div>

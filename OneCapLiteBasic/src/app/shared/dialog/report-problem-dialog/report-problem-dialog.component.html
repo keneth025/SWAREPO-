@@ -1,0 +1,50 @@
+<button class="close-btn" matDialogClose>
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  {{ item?.Title || '(No Course)' }}
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body">
+  <div class="message-section">
+    <div> Having trouble with this {{ itemType.toLowerCase() }}? </div>
+    <div> Contact the {{ itemType }} Owner. </div>
+  </div>
+
+  <div class="owner-section">
+    <div class="section-header">
+      {{ itemType }} Owners:
+    </div>
+
+    <div class="section-table" *ngIf="item?.Owners.length > 0">
+      <div class="table-item" *ngFor="let people of item?.Owners">
+        <div> {{ people.Title }} </div>
+        <a [href]="'mailto:' + people.EMail + '?subject=[OneCap Report] ' + item?.Title"> {{ people.EMail }} </a>
+      </div>
+    </div>
+
+    <div class="section-message" *ngIf="item?.Owners.length === 0">
+      <label class="onecap-label primary">
+        No owners available.
+      </label>
+    </div>
+  </div>
+
+  <div class="feedback-section">
+    <div class="message">
+      Got questions, comments, or suggestions for OneCap Lite?
+    </div>
+    <button class="onecap-btn primary" (click)="submitFeedback()">
+      <div class="button-wrapper">
+        <img class="icon wht icon-dxc communications-envelope">
+        Submit Feedback
+      </div>
+    </button>
+  </div>
+</section>
+<!-- #endregion -->
+

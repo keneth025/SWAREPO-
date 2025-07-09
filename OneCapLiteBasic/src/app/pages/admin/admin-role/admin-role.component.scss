@@ -1,0 +1,22 @@
+#filters {
+  display               : grid;
+  grid-template-columns : repeat(4, 1fr);
+  align-items           : center;
+  gap                   : 10px;
+}
+
+#actions {
+  display: grid;
+  justify-content: flex-end;
+}
+
+#role-table {
+  .table-header, .table-row {
+    grid-template-columns: 1fr 175px;
+    .onecap-link-btn {
+      text-align: left;
+      justify-content: flex-start;
+      padding-left: 0px;
+    }
+  }
+}

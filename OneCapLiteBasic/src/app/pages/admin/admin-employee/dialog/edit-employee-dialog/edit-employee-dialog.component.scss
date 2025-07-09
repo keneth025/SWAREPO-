@@ -1,0 +1,87 @@
+#details-section {
+  justify-content: center;
+  gap: 10px;
+}
+
+#single-form, #batch-form, #upload-type {
+  width: 512px;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: rgba($color: #d9d9d9, $alpha: 0.25);
+}
+
+#upload-type {
+  display         : grid;
+  grid-template-columns  : max-content 240px;
+  align-items     : center;
+  gap             : 15px;
+
+  label {
+    font-size   : var(--font-sm);
+    font-weight : bold;
+  }
+
+  .onecaplite-group-btn {
+    width   : 300px;
+
+    .btn {
+      height: 30px;
+    }
+  }
+}
+
+#batch-form {
+  padding               : 20px;
+  display               : grid;
+  grid-template-columns : 1fr;
+
+  & > label {
+    font-weight: bold;
+  }
+}
+
+
+.result-page {
+  margin: 0px 60px 30px;
+
+  display: grid;
+  gap: 20px;
+  label { font-weight: bold; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 175px 1fr;
+  }
+
+  .field-list {
+    gap: 10px;
+    & > .list {
+      display: grid;
+      gap: 5px;
+    }
+  }
+}
+
+.results {
+  margin    : 0px 60px;
+  display   : grid;
+  gap       : 50px;
+}
+
+.results-table {
+  display               : grid;
+  grid-template-columns : 200px 1fr;
+  align-items           : baseline;
+  gap                   : 20px;
+  label {
+    font-weight: bold;
+  }
+
+  .row {
+    display     : grid;
+    gap         : 20px;
+    align-items : baseline;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+

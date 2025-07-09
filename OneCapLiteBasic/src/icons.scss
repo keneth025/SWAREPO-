@@ -1,0 +1,133 @@
+img {
+
+  &.icon {
+    object-fit: contain;
+    height: 20px;
+    width: 20px;
+  }
+
+  &.mini {
+    object-fit: contain;
+    height: 8px;
+    width: 8px;
+  }
+
+  &.icon-export {
+    mask:  no-repeat center;
+    &.blue { background-color: var(--onecaplite-blue); }
+    &.wht { background-color: var(--onecaplite-white); }
+  }
+
+  &.icon-dxc {
+    mask-position   : center;
+    mask-size       : contain;
+    mask-repeat     : no-repeat;
+
+    background-color: var(--onecaplite-purple);
+    &.approved-web-check {
+      mask-image: url('./assets/new-dxc-icons/Approved_WebCheck.svg');
+    }
+
+    &.business-management-person-gear {
+      mask-image: url('./assets/new-dxc-icons/Business_Management_PersonGear.svg');
+    }
+
+    &.business-management-person-puzzle {
+      mask-image: url('./assets/new-dxc-icons/Business_Management_PersonPuzzle.svg');
+    }
+
+    &.communications-envelope {
+      mask-image: url('./assets/new-dxc-icons/Communications_Envelope.svg');
+    }
+
+    &.data-analysis-chart-magnify {
+      mask-image: url('./assets/new-dxc-icons/DataAnalysis_ChartMagnify.svg');
+    }
+
+    &.data-exchange-page-computer, &.export {
+      mask-image: url('./assets/new-dxc-icons/DataExchange_PageComputer.svg');
+    }
+
+    &.engineering-braingear {
+      mask-image: url('./assets/new-dxc-icons/Engineering_BrainGear.svg');
+    }
+
+    &.finance2-certificate {
+      mask-image: url('./assets/new-dxc-icons/Finance2_Certificate.svg');
+    }
+
+    &.startup-lightbulb {
+      mask-image: url('./assets/new-dxc-icons/Startup_Lightbulb.svg');
+    }
+
+    &.layers-layers-2 {
+      mask-image: url('./assets/new-dxc-icons/Layers_Layers2.svg');
+    }
+
+    &.layers-layers-4 {
+      mask-image: url('./assets/new-dxc-icons/Layers_Layers4.svg');
+    }
+
+    &.legal-books {
+      mask-image: url('./assets/new-dxc-icons/Legal_Books.svg');
+    }
+
+    &.people-orgs-3-people {
+      mask-image: url('./assets/new-dxc-icons/People-Orgs_3People.svg');
+    }
+
+    &.people-orgs-people-happy {
+      mask-image: url('./assets/new-dxc-icons/People-Orgs_PeopleHappy.svg');
+    }
+
+    &.people-orgs-group {
+      mask-image: url('./assets/new-dxc-icons/People-Orgs_Group.svg');
+    }
+
+    &.people-orgs-people-chart {
+      mask-image: url('./assets/new-dxc-icons/People-Orgs_PeopleChart.svg');
+    }
+
+    &.real-estate-house {
+      mask-image: url('./assets/new-dxc-icons/RealEstate_House.svg');
+    }
+
+    &.search-search {
+      mask-image: url('./assets/new-dxc-icons/Search_Search.svg');
+    }
+
+    &.startup-person-lightbulb-2 {
+      mask-image: url('./assets/new-dxc-icons/Startup_PersonLightbulb 2.svg');
+    }
+
+    &.startup-messages {
+      mask-image: url('./assets/new-dxc-icons/Startup_Messages.svg');
+    }
+
+    &.surveys-form-pencil {
+      mask-image: url('./assets/new-dxc-icons/Surveys_FormPencil.svg');
+    }
+
+    &.surveys-pencil-checkbox {
+      mask-image: url('./assets/new-dxc-icons/Surveys_PencilCheckbox.svg');
+    }
+
+    &.testimonials-like-comment-2 {
+      mask-image: url('./assets/new-dxc-icons/Testimonials_LikeComment2.svg');
+    }
+
+    &.tools-person-gear-wrench {
+      mask-image: url('./assets/new-dxc-icons/Tools_GearWrench.svg');
+    }
+
+    &.winning-person-flag {
+      mask-image: url('./assets/new-dxc-icons/Winning_PersonFlag.svg');
+    }
+
+    &.blk { background-color: var(--onecaplite-black); }
+    &.wht { background-color: var(--onecaplite-white); }
+    &.primary { background-color: var(--onecaplite-blue); }
+    &.accent-2 { background-color: var(--onecaplite-blue); }
+  }
+
+}
