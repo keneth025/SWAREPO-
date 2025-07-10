@@ -1,0 +1,713 @@
+<button class="close-btn" (click)="closeDialog()">
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  <div class="dialog-title"> {{ dialogTitle }} Exam </div>
+</section>
+<!-- #endregion -->
+
+
+<!-- #region Dialog Body -->
+
+<section  class="dialog-body">
+  <mat-horizontal-stepper class="onecap-stepper"
+    #stepper
+    linear
+  >
+    <mat-step label="Exam Details"
+      [completed]="FormDetails.valid"
+    >
+      <div class="stepper-loader" *ngIf="dialogIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div id="details-section" class="stepper-content"
+        [ngStyle]="hideElement(dialogIsLoading)"
+      >
+        <section class="basic-form"
+          [formGroup]="FormDetails"
+        >
+
+          <div class="column">
+            <!-- Exam Name -->
+            <div class="onecap-input-form"
+              [ngClass]="{
+                'invalid': FormDetails.get('Title').invalid
+              }"
+            >
+              <label> Exam Name<span class="required">*</span> </label>
+              <div class="input-container">
+                <input type="text"
+                  formControlName="Title"
+                />
+              </div>
+            </div>
+
+            <!-- Exam Description -->
+            <div class="onecap-input-form"
+              [ngClass]="{
+                'invalid': FormDetails.get('Description').invalid
+              }"
+            >
+              <label> Exam Description </label>
+              <div class="editor-container">
+                <ckeditor
+                  formControlName="Description"
+                  [editor]="editor"
+                  [config]="editorConfig"
+                ></ckeditor>
+                <div class="counter">
+                  {{ DescriptionCount | async }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Owners -->
+            <div class="onecap-input-form"
+              [ngClass]="{
+                'invalid': FormDetails.get('Owners').invalid
+              }"
+              (focus)="inputOwner.focus()"
+              (click)="inputOwner.focus()"
+            >
+              <label>
+                Exam Owners<span class="required">*</span>
+                <div class="info-message">Search by name or email</div>
+              </label>
+              <div class="textarea-container">
+                <div class="item-list">
+                  <div class="item-selection"
+                    *ngFor="let owner of FormDetails.get('Owners').value;let i = index"
+                  >
+                    <button class="onecap-icon-btn delete"
+                      (click)="removeOwner(i)"
+                    >
+                      <span class="material-icons">clear</span>
+                    </button>
+                    <span>{{ owner.Title }}</span>
+                  </div>
+                </div>
+                <input #inputOwner type="text"
+                  [formControl]="OwnersControl"
+                  [matAutocomplete]="auto"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+
+            <!-- Passing Rate -->
+            <div class="onecap-input-form"
+              [ngClass]="{
+                'invalid': FormDetails.get('PassingRate').invalid
+              }"
+            >
+              <label> Passing Rate<span class="required">*</span> </label>
+              <div class="input-container short suffix">
+                <input type="number"
+                  formControlName="PassingRate"
+                  (keypress)="filterNumberInputs($event)"
+                  (blur)="revertToMinOrMax($event)"
+                  [min]="0"
+                  [max]="100"
+                />
+                <b>%</b>
+              </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="onecap-input-form"
+              [ngClass]="{
+                'invalid': FormDetails.get('Tags').invalid
+              }"
+            >
+              <label> Tags </label>
+              <div class="input-container">
+                <input type="text"
+                  formControlName="Tags"
+                />
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="onecap-input-form"
+              [ngClass]="{ 'invalid': FormDetails.get('LearningCategory').invalid }"
+            >
+              <label> Category <span class="required">*</span> </label>
+              <div class="select-container">
+                <mat-select
+                  [panelClass]="'onecap-option-container'"
+                  [disableOptionCentering]="true"
+                  [placeholder]="'-'"
+                  formControlName="LearningCategory"
+                >
+                  <mat-option
+                    *ngFor="let item of (LearningCategoryList | async)"
+                    [value]="item"
+                  >{{ item.Title }}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <!-- Sub Category -->
+            <div class="onecap-input-form"
+              [ngClass]="{ 'invalid': FormDetails.get('LearningSubCategory').invalid }"
+            >
+              <label> Sub-Category <span class="required">*</span> </label>
+              <div class="select-container">
+                <mat-select
+                  [panelClass]="'onecap-option-container'"
+                  [disableOptionCentering]="true"
+                  [placeholder]="'-'"
+                  formControlName="LearningSubCategory"
+                >
+                  <mat-option
+                    *ngFor="let item of (FilteredLearningSubCategoryList | async)"
+                    [value]="item"
+                  >{{ item.Title }}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="stepper-action">
+        <button class="onecap-btn accent-2"
+          (click)="validateName()"
+          [disabled]="FormDetails.invalid"
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </mat-step>
+
+    <!-- #region Exam Questions -->
+    <mat-step label="Questions & Answers" [completed]="QuestionForm.valid">
+      <div class="stepper-loader" *ngIf="questionIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div class="stepper-content"
+        [ngStyle]="hideElement(questionIsLoading)"
+      >
+        <div id="question-list" *ngIf="QuestionForm.controls as QuestionForms">
+          <div class="q-item"
+            *ngFor="let question of QuestionForms; let questionIndex = index"
+            [ngClass]="{ 'invalid': question.invalid }"
+            [formGroup]="question"
+          >
+            <div class="spacer"></div>
+
+            <!-- Question Type -->
+            <div class="q-type">
+              <div class="select-container">
+                <mat-select
+                  [panelClass]="'onecap-option-container'"
+                  [disableOptionCentering]="true"
+                  placeholder="-"
+                  formControlName="Type"
+                >
+                  <mat-option [value]="QuestionType.TRUE_OR_FALSE">True or False</mat-option>
+                  <mat-option [value]="QuestionType.SINGLE_ANSWER">Single Answer</mat-option>
+                  <mat-option [value]="QuestionType.MULTIPLE_ANSWER">Multiple Answers</mat-option>
+                </mat-select>
+              </div>
+              <button class="onecap-icon-btn error"
+                (click)="addQuestionToBeDeleted(question.value);QuestionForm.removeAt(questionIndex)"
+              >
+                <span class="material-icons">clear</span>
+              </button>
+            </div>
+
+            <div class="q-index">
+              {{ questionIndex + 1 }}.
+            </div>
+            <div class="q-details">
+              <div class="onecap-input-form"
+                [ngClass]="{
+                  'invalid': question.get('QuestionText').invalid
+                }"
+              >
+                <div class="input-container">
+                  <input type="text"
+                    formControlName="QuestionText"
+                    [placeholder]="'Question #' + (questionIndex + 1)"
+                  />
+                </div>
+              </div>
+              <ng-container [ngSwitch]="question.get('Type').value">
+                <mat-radio-group class="onecap-radio-group form"
+                  *ngSwitchCase="QuestionType.TRUE_OR_FALSE"
+                  formControlName="QuestionIsTrue"
+                >
+                  <div class="radio-row">
+                    <mat-radio-button class="onecap-radio-button primary"
+                      [value]="true"
+                    ></mat-radio-button>
+                    True
+                  </div>
+                  <div class="radio-row">
+                    <mat-radio-button class="onecap-radio-button primary"
+                      [value]="false"
+                    ></mat-radio-button>
+                    False
+                  </div>
+                </mat-radio-group>
+
+                <mat-radio-group class="onecap-radio-group form"
+                  *ngSwitchCase="QuestionType.SINGLE_ANSWER"
+                  formControlName="CorrectAnswerIdx"
+                >
+                  <div class="radio-row input"
+                    *ngFor="let answer of answersControl(question.get('Answers'));let aIndex=index"
+                    [formGroup]="answer"
+                  >
+                    <mat-radio-button class="onecap-radio-button primary"
+                      [value]="aIndex"
+                    ></mat-radio-button>
+
+                    <div class="onecap-input-form"
+                      [ngClass]="{
+                        'invalid': answer.get('AnswerText').invalid
+                      }"
+                    >
+                      <div class="input-container">
+                        <input type="text"
+                          formControlName="AnswerText"
+                          [placeholder]="'Answer #' + (aIndex + 1)"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-radio-group>
+
+                <div class="answer-list"
+                  *ngSwitchCase="QuestionType.MULTIPLE_ANSWER"
+                >
+                  <ng-container
+                    formArrayName="Answers"
+                    *ngIf="answersControl(question.get('Answers')) as AnswersControl"
+                  >
+                    <ng-container
+                      *ngFor="let _ of AnswersControl; let aIndex=index;"
+                      [formGroupName]="aIndex"
+                    >
+                      <div class="checkbox-row input">
+                        <mat-checkbox class="onecap-checkbox form a-item"
+                          formControlName="IsAnswer"
+                        ></mat-checkbox>
+                        <div class="onecap-input-form"
+                          [ngClass]="{
+                            'invalid': AnswersControl[aIndex].get('AnswerText').invalid
+                          }"
+                        >
+                          <div class="input-container">
+                            <input type="text"
+                              formControlName="AnswerText"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <button class="onecap-btn primary"
+            (click)="QuestionForm.push(createQuestionForm())"
+          >
+            <div class="button-wrapper">
+              <span class="material-icons">add</span>
+              Add Question
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="stepper-action">
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          [disabled]="QuestionForm.invalid"
+          matStepperNext
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+
+    </mat-step>
+    <!-- #endregion Exam Questions -->
+
+    <!-- #region Assigned Curricula -->
+    <mat-step label="Assign Curricula"
+      [optional]="true"
+    >
+      <div class="stepper-loader" *ngIf="curriculumIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div class="stepper-content selection"
+        [ngStyle]="hideElement(curriculumIsLoading)"
+      >
+        <section class="selection-section">
+          <div id="filter">
+            <div class="onecap-input-form">
+              <label>Curriculum Name</label>
+              <div class="input-container">
+                <input type="text"
+                  placeholder="Search"
+                  [formControl]="CurriculumSearchFilter"
+                />
+              </div>
+            </div>
+            <div class="tip">
+              By default, the exam will be added as the last exam of each curriculum. You can update the order of the exams in <b> Admin > Curricula </b> page.
+            </div>
+          </div>
+
+          <div id="selection-container">
+
+            <div class="selection-table" *ngIf="FilteredCurriculumList | async as list">
+              <div class="table-header">
+                <div></div>
+                <div class="col"> Curriculum Name </div>
+              </div>
+
+              <div class="table-row" *ngIf="list.length === 0">
+                <span></span>
+                <label class="onecap-lbl error">
+                  No curriculum available.
+                </label>
+              </div>
+
+              <div class="table-row"
+                *ngFor="let item of list"
+              >
+                <div>
+                  <button
+                    class="onecap-icon-btn accent-2"
+                    (click)="AssignedCurriculum.select(item)"
+                  >+</button>
+                </div>
+                <div class="col">
+                  {{ item.Title }}
+                </div>
+              </div>
+            </div>
+
+            <span id="separator"></span>
+
+            <div class="selection-table">
+              <div class="table-header">
+                <div></div>
+                <div class="col"> Assigned Curricula </div>
+              </div>
+
+              <div class="table-row" *ngIf="!AssignedCurriculum.hasValue()">
+                <span></span>
+                <label class="onecap-lbl error">
+                  No curriculum assigned.
+                </label>
+              </div>
+
+              <div class="table-row"
+                *ngFor="let item of AssignedCurriculum.selected"
+              >
+                <button class="onecap-icon-btn error"
+                  [disabled]="!item.IsOwner"
+                  (click)="AssignedCurriculum.deselect(item)"
+                >
+                  <span class="material-icons">clear</span>
+                </button>
+                <div class="col">
+                  {{ item.Title }}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+      <div class="stepper-action">
+        <button class="onecap-link-btn accent-2"
+          (click)="stepper.selectedIndex = 4"
+        >
+          Skip Assigning Curricula and Courses
+        </button>
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          matStepperNext
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </mat-step>
+    <!-- #endregion Assigned Curricula -->
+
+    <!-- #region Related Courses -->
+    <mat-step label="Related Courses"
+      [optional]="true"
+    >
+      <div class="stepper-loader" *ngIf="courseIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div class="stepper-content selection"
+        [ngStyle]="hideElement(courseIsLoading)"
+      >
+        <section class="selection-section">
+          <div id="filter">
+            <div class="onecap-input-form">
+              <label>Course Name</label>
+              <div class="input-container">
+                <input type="text"
+                  placeholder="Search"
+                  [formControl]="CourseSearchFilter"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div id="selection-container">
+
+            <div class="selection-table" *ngIf="FilteredCourseList | async as list">
+              <div class="table-header">
+                <div></div>
+                <div class="col"> Course Name </div>
+              </div>
+
+              <div class="table-row" *ngIf="list.length === 0">
+                <span></span>
+                <label class="onecap-lbl error">
+                  No course available.
+                </label>
+              </div>
+
+              <div class="table-row"
+                *ngFor="let item of list"
+              >
+                <div>
+                  <button
+                    class="onecap-icon-btn accent-2"
+                    (click)="AssignedCourse.select(item)"
+                  >+</button>
+                </div>
+                <div class="col">
+                  {{ item.Title }}
+                </div>
+              </div>
+            </div>
+
+            <span id="separator"></span>
+
+            <div class="selection-table">
+              <div class="table-header">
+                <div></div>
+                <div class="col"> Related Courses </div>
+              </div>
+
+              <div class="table-row" *ngIf="AssignedCourse.isEmpty()">
+                <span></span>
+                <label class="onecap-lbl error">
+                  No related course assigned.
+                </label>
+              </div>
+
+              <div class="table-row"
+                *ngFor="let item of AssignedCourse.selected"
+              >
+                <button class="onecap-icon-btn error"
+                  (click)="AssignedCourse.deselect(item)"
+                >
+                  <span class="material-icons">clear</span>
+                </button>
+                <div class="col">
+                  {{ item.Title }}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+      <div class="stepper-action">
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          matStepperNext
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </mat-step>
+    <!-- #endregion Assigned Curricula -->
+
+    <!-- #region Confirm Details -->
+    <mat-step label="Confirm Details">
+      <div class="stepper-content"
+        *ngIf="FormDetails.value as details"
+        [ngStyle]="hideElement(!FormDetails.valid)"
+      >
+        <div class="basic-form summary" >
+          <div class="column">
+            <div class="field">
+              <label>Exam Name*</label>
+              <div> {{ details.Title }} </div>
+            </div>
+
+            <div class="field">
+              <label>Exam Description</label>
+              <div [innerHTML]="details.Description"></div>
+              <div *ngIf="(DescriptionCount | async) === 0">No description available.</div>
+            </div>
+
+            <div class="field">
+              <label>Exam Owner/s*</label>
+              <div class="list">
+                <div *ngFor="let owner of details.Owners">
+                  {{ owner.Title }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Passing Rate*</label>
+              <div> {{ details.PassingRate }}% </div>
+            </div>
+          </div>
+
+          <div class="column">
+
+            <div class="field">
+              <label>Category*</label>
+              <div> {{ details.LearningCategory? details.LearningCategory.Title : '' }} </div>
+            </div>
+
+            <div class="field">
+              <label>Sub-Category*</label>
+              <div> {{ details.LearningSubCategory? details.LearningSubCategory.Title : '' }} </div>
+            </div>
+
+            <div class="field">
+              <label>Total No. of Questions</label>
+              <div> {{ QuestionForm.length }} </div>
+            </div>
+
+            <div class="field">
+              <label>Tags</label>
+              <div> {{ details.Tags ? details.Tags : '(Blank)' }} </div>
+            </div>
+
+          </div>
+        </div>
+
+        <section class="assigned-section">
+          <div class="basic-form summary">
+            <div class="column">
+
+              <div class="field">
+                <label>Assigned Curricula</label>
+                <div class="list">
+                  <div class="onecap-lbl error" *ngIf="AssignedCurriculum.isEmpty()">
+                    No curriculum assigned.
+                  </div>
+                  <div *ngFor="let item of AssignedCurriculum.selected">
+                    {{ item.Title }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Related Courses</label>
+                <div class="list">
+                  <div class="onecap-lbl error" *ngIf="AssignedCourse.isEmpty()">
+                    No related course assigned.
+                  </div>
+                  <div *ngFor="let item of AssignedCourse.selected">
+                    {{ item.Title }}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      </div>
+
+      <div class="stepper-action">
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          (click)="save()"
+        > Submit </button>
+      </div>
+    </mat-step>
+    <!-- #endregion -->
+
+    <ng-template
+      matStepperIcon="done"
+      let-index="index"
+      let-active="active"
+    > {{ index + 1 }} </ng-template>
+
+    <ng-template
+      matStepperIcon="edit"
+      let-index="index"
+      let-active="active"
+    > {{ index + 1 }} </ng-template>
+
+  </mat-horizontal-stepper>
+</section>
+
+<!-- #endregion -->
+
+<mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption [displayWith]="displayFn" (optionSelected)="addOwner($event.option.value)">
+  <mat-option *ngIf="IsSearchingUser" [disabled]="true">
+    <div class="flex align-items-center justify-content-center" >
+      <mat-spinner [diameter]="24"></mat-spinner>
+    </div>
+  </mat-option>
+  <ng-container *ngIf="!IsSearchingUser && (SearchUserList | async) as searchedUsers">
+    <mat-option [value]="profile" *ngFor="let profile of searchedUsers">
+      {{ profile.DisplayText }}
+    </mat-option>
+  </ng-container>
+</mat-autocomplete>

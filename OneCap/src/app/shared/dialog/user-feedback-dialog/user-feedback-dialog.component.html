@@ -1,0 +1,50 @@
+<button class="close-btn" matDialogClose>
+  <span class="material-icons">close</span>
+</button>
+
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  <span class="dialog-title">Feedback Form</span>
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body flex flex-column align-items-stretch justify-content-start" [formGroup]="submitionForm">
+  <div class="mini-label">
+    We would like to hear your suggestions or concerns to help us improve!
+  </div>
+
+  <div class="onecap-input-form">
+    <label> Affected Page/s </label>
+    <div class="select-container">
+      <mat-select formControlName="selectedPages" multiple panelClass="onecap-option-container">
+        <mat-option *ngFor="let pages of oneCapPages"
+          [value]="pages"
+        > {{ pages }} </mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+  <div class="onecap-input-form">
+    <label> Feedback* </label>
+    <div class="editor-container">
+      <ckeditor
+        class="flex-grow-1"
+        [editor]="editor"
+        [config]="editorConfig"
+        formControlName="feedback"
+      ></ckeditor>
+    </div>
+  </div>
+
+</section>
+<!-- #endregion -->
+
+<section class="dialog-action">
+  <button class="onecap-btn primary"
+    (click)="submitForm()"
+    [disabled]="submitionForm.invalid"
+  > Submit </button>
+</section>
+

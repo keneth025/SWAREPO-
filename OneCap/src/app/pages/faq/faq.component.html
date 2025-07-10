@@ -1,0 +1,65 @@
+<div class="page-container">
+  <section class="page-header">
+    <div class="page-title"> Frequently Asked Questions </div>
+  </section>
+
+  <section class="page-body" [hidden]="PageIsLoading">
+
+    <!-- Filters -->
+    <section id="filters" class="card">
+      <!-- Search -->
+      <div class="onecap-input-form">
+        <label>Search</label>
+        <div class="input-container">
+          <input type="text"
+            placeholder="Search"
+            [formControl]="KeywordFilter"
+          />
+        </div>
+      </div>
+
+      <button class="onecap-btn primary" (click)="submitForm()">
+        <div class="button-wrapper">
+          <img class="icon wht icon-dxc communications-envelope">
+          Submit Feedback
+        </div>
+      </button>
+
+    </section>
+
+    <section id="item-headers-section">
+      <button (click)="scrollToId(item)" class="header-button" *ngFor="let item of (FAQItems | async)">
+        {{ item }}
+      </button>
+    </section>
+
+
+    <section id="items" class="card">
+      <div class="section-item" *ngFor="let item of (FilteredFAQItems | async);">
+        <div [id]="item.header" class="item-header">
+          {{ item.header }}
+        </div>
+        <div class="item-body">
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let qItem of item.questions">
+              <mat-expansion-panel-header>
+                <mat-panel-title> {{ qItem.Question }} </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-panel-description>
+                {{ qItem.Answer }}
+              </mat-panel-description>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+
+      </div>
+    </section>
+
+  </section>
+
+  <section class="page-loader" *ngIf="PageIsLoading">
+    <app-loader></app-loader>
+  </section>
+
+</div>

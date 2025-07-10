@@ -1,0 +1,17 @@
+:host {
+  width: 300px;
+  min-height: 125px;
+  display: grid;
+  grid-template-rows: 1fr max-content;
+  gap: 5px;
+}
+
+.dialog-body {
+  align-items: center;
+  text-align: center;
+}
+
+.dialog-action {
+  grid-auto-flow: column;
+  gap: 15px
+}

@@ -1,0 +1,19 @@
+.dialog-body {
+  display       : grid;
+  grid-auto-rows: max-content;
+  gap           : 5px;
+}
+
+.content-container {
+  height: 100px;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-container {
+  display       : grid;
+  grid-auto-flow: column;
+  gap           : 25px;
+  justify-self  : center;
+}

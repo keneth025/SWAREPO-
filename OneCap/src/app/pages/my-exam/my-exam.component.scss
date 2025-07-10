@@ -1,0 +1,11 @@
+.onecap-table.exams {
+  .table-header, .table-row {
+    grid-template-columns: 3fr 2fr 30px;
+  }
+}
+
+#exam-action {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  justify-content: space-between;
+}

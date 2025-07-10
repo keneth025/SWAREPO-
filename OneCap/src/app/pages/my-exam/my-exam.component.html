@@ -1,0 +1,121 @@
+<div class="page-container">
+
+  <section class="page-header">
+    <div class="page-title"> My Exam List </div>
+  </section>
+
+  <section class="page-body" *ngIf="!PageIsLoading">
+
+    <div id="exam-action">
+      <div class="onecap-group-btn">
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === -1) }"
+          (click)="StatusFilterForm.setValue(-1)"
+        > All </button>
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === 0) }"
+          (click)="StatusFilterForm.setValue(0)"
+        > Not yet taken </button>
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === 1) }"
+          (click)="StatusFilterForm.setValue(1)"
+        > Failed </button>
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === 2) }"
+          (click)="StatusFilterForm.setValue(2)"
+        > Passed </button>
+      </div>
+
+      <button class="onecap-outline-btn accent-2"
+        (click)="exportReport()"
+        [disabled]="PageIsLoading"
+      >
+        <div class="button-wrapper">
+          <img class="icon icon-dxc export accent-2" />
+          Export
+        </div>
+      </button>
+    </div>
+
+    <div class="card" *ngIf="(FilteredList | async) as ItemList">
+
+      <div class="onecap-table exams">
+        <div class="table-header">
+
+          <div class="section">
+            <div class="col-name">Exam Title</div>
+            <div class="col-name">Curriculum</div>
+            <div class="col-name action">Action</div>
+          </div>
+
+          <div class="section">
+            <div class="col-name">Status</div>
+            <div class="col-name">Completion Date</div>
+          </div>
+
+          <div class="section"></div>
+
+        </div>
+
+        <div class="table-row" *ngFor="let exam of ItemList">
+
+          <div class="section">
+            <!-- Exam Title -->
+            <div class="col-name"> {{ exam.Title ? exam.Title : '' }} </div>
+
+            <!-- Curriculum Titles -->
+            <div class="col-name">
+              <div class="list">
+                <div *ngFor="let curriculumName of exam.CurriculumNameArr">
+                  {{curriculumName}}
+                </div>
+              </div>
+            </div>
+
+            <!-- Action -->
+            <div class="col-name">
+              <button class="onecap-btn primary"
+                (click)="launch(exam)"
+              > Launch </button>
+            </div>
+
+          </div>
+
+          <div class="section">
+            <!-- Exam Status -->
+            <div class="col-name onecap-lbl"
+              [ngClass]="{
+                'completed': exam.Status === ExamStatus.PASSED,
+                'error': exam.Status === ExamStatus.FAILED
+              }"
+            > {{ exam.Status }} </div>
+
+            <!-- Date Modified -->
+            <div class="col-name"> {{ (exam.Status === ExamStatus.PASSED) ? exam.CompletionDate : '' }} </div>
+          </div>
+
+          <div class="section">
+            <button id="more-info" class="onecap-icon-btn" [matMenuTriggerFor]="examMenu">
+              <span class="material-icons">more_horiz</span>
+            </button>
+            <mat-menu #examMenu="matMenu">
+              <button mat-menu-item (click)="copyToClipBoard(exam.Title)">Copy Link</button>
+              <button mat-menu-item (click)="reportProblem(exam)">Contact Us</button>
+            </mat-menu>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card-message"
+        *ngIf="ItemList.length === 0"
+      > No exams assigned. </div>
+    </div>
+
+  </section>
+
+  <section class="page-loader" *ngIf="PageIsLoading">
+    <app-loader></app-loader>
+  </section>
+
+</div>

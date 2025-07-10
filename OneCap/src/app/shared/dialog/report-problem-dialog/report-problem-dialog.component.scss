@@ -1,0 +1,68 @@
+.dialog-header, .dialog-body {
+  text-align: center;
+}
+
+.dialog-body {
+  display: grid;
+  gap: 20px;
+}
+
+.message-section {
+  margin-top: 20px;
+}
+
+.owner-section {
+  margin              : 0px 10px;
+  display             : grid;
+  min-height          : 100px;
+  max-height          : 200px;
+  gap                 : 5px;
+  justify-content     : stretch;
+  grid-template-rows  : max-content 1fr;
+  .section-header {
+    font-weight : bold;
+    text-align  : left;
+  }
+
+  .section-table {
+    overflow: auto;
+    display : grid;
+    gap     : inherit;
+    grid-auto-rows    : max-content;
+
+    .table-item {
+      display           : grid;
+      grid-auto-flow    : column;
+      grid-auto-columns : 1fr;
+      gap               : inherit;
+
+      *:first-child {
+        text-align: left;
+      }
+
+      *:last-child {
+        text-align: right;
+      }
+    }
+  }
+
+  .section-message {
+    display         : grid;
+    align-items     : center;
+    justify-content : center;
+  }
+
+
+}
+
+.feedback-section {
+  background-color  : rgba($color: #d9d9d9, $alpha: 0.3);
+  border-radius     : 5px;
+  padding           : 15px;
+  display           : grid;
+  gap               : 15px;
+
+  .onecap-btn {
+    justify-self: center;
+  }
+}

@@ -1,0 +1,20 @@
+.loader-page {
+  height  : 100%;
+  width   : 100%;
+  display       : grid;
+  align-items   : center;
+  justify-items : center;
+  .loader-wrapper {
+    display       : grid;
+    justify-items : center;
+    align-items   : center;
+  }
+  .loader-label {
+    font-size: 14px;
+  }
+}
+
+.app-page {
+  height  : 100%;
+  width   : 100%;
+}

@@ -1,0 +1,48 @@
+<button class="close-btn" matDialogClose>
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  {{ item?.Title || '(No Course)' }}
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body">
+  <div class="content-container">
+    Content was opened in a new window.
+  </div>
+  <div class="action-container">
+    <button class="onecap-btn"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+
+    <button class="onecap-outline-btn primary"
+      *ngIf="item?.Status === CourseStatus.NotRegistered"
+      (click)="saveToMyCourse()"
+    >
+      Add to My Courses
+    </button>
+
+    <button class="onecap-btn completed light"
+      *ngIf="item.Status !== CourseStatus.Completed"
+      (click)="saveToMyCourse(true)"
+    >
+      <div class="button-wrapper">
+        Mark as Complete <span class="material-icons">task_alt</span>
+      </div>
+    </button>
+
+    <button class="onecap-btn completed light"
+      *ngIf="item.Status === CourseStatus.Completed"
+    >
+      Status: Completed
+    </button>
+  </div>
+
+</section>
+<!-- #endregion -->
+

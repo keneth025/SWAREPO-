@@ -1,0 +1,179 @@
+<div class="home-content" [hidden]="pageIsLoading">
+  <div class="top-row">
+    <!-- Announcement Carousel -->
+    <div class="carousel">
+      <ngu-carousel #carouselAnnouncements class="carousel-announcement"
+        *ngIf="announcements.length > 0"
+        [inputs]="announcementCarousel"
+        [dataSource]="announcements"
+      >
+        <ngu-item *nguCarouselDef="let item;let idx = index">
+          <div class="announcement-carousel-item" [style.background]="'url('+item.BackgroundImageUrl+')'">
+            <div class="announcement-container">
+              <div class="content">
+                <div class="header">
+                  {{ item.Title }}
+                </div>
+                <div class="description">
+                  {{ item.Description }}
+                </div>
+                <a class="link" [href]="item.Link" target="_blank">
+                  READ MORE
+                </a>
+                <span class="spacer"></span>
+                <div class="footer">
+                  <div class="page-dot">
+                    <span *ngFor="let e of announcements;let i=index"
+                      class="dot"
+                      [ngClass]="{'active': i === idx}"
+                      (click)="carouselAnnouncements.moveTo(i)"
+                    ></span>
+                  </div>
+                  <div class="next-page" (click)="announcementNext.click()">
+                    <div>NEXT FEATURE</div>
+                    <span class="round-button">
+                      <span class="icon material-icons">east</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ngu-item>
+        <button #announcementPrev NguCarouselPrev hidden>Prev</button>
+        <button #announcementNext NguCarouselNext hidden>Next</button>
+      </ngu-carousel>
+
+      <div *ngIf="announcements.length === 0"
+        class="carousel-announcement no-data-container"
+      > No announcement available. </div>
+    </div>
+
+    <!-- Mandatory Trainings -->
+    <div class="card-item mandatory-trainings">
+      <div class="header">
+        Ongoing Mandatory Training
+      </div>
+      <div class="body" *ngIf="mandatoryTrainings.length > 0">
+        <ng-container *ngFor="let item of mandatoryTrainings">
+          <div class="course-item"
+            *ngIf="item.Type === 'Course'"
+            (click)="goToCourseLibrary('Title', item.Name)"
+          >
+            <div class="course-title">
+              {{ item.Name }}
+            </div>
+            <div class="label-due"> Due on {{ item.DueDateString }} </div>
+            <div class="label-status"
+              [ngClass]="{
+                complete: item.Status === CourseStatus.Completed,
+                pending: item.Status === CourseStatus.Pending
+              }"
+            > {{ item.Status }} </div>
+          </div>
+
+          <div class="course-item"
+            *ngIf="item.Type === 'Exam'"
+            (click)="goToExamLibrary('Title', item.Name)"
+          >
+            <div class="course-title">
+              {{ item.Name }}
+            </div>
+            <div class="label-due"> Due on {{ item.DueDateString }} </div>
+            <div class="label-status"
+              [ngClass]="{
+                complete: item.Status === ExamStatus.PASSED,
+                pending: item.Status === ExamStatus.FAILED
+              }"
+            > {{ item.Status }} </div>
+          </div>
+
+        </ng-container>
+      </div>
+      <div *ngIf="mandatoryTrainings.length === 0"
+        class="body no-data-container"
+      > No mandatory trainings for this time. </div>
+    </div>
+  </div>
+
+  <!-- Lower Area -->
+  <div class="bottom-row">
+
+    <!-- Featured Curricula -->
+    <div class="carousel-curriculum">
+      <div class="header">
+        Featured Curricula
+      </div>
+      <div *ngIf="featuredCurricula.length !== 0" class="carousel-container">
+
+        <ngu-carousel #carouselCurriculum class="curriculum-container"
+          *ngIf="featuredCurricula.length > 0"
+          [inputs]="curriculumCarousel"
+          [dataSource]="featuredCurricula"
+        >
+          <ngu-item *nguCarouselDef="let item;let i = index">
+            <div class="curriculum-item" *ngIf="!item['filler']">
+              <div class="title">
+                <span class="overflow-text">
+                  {{ item.Title }}
+                </span>
+              </div>
+              <div class="description">
+                <div
+                  class="desc-container"
+                  *ngIf="item.HasDescription"
+                >
+                  <span class="overflow-text"
+                    (click)="displayCurriculumDescription(item)"
+                  > {{ item.RawDescription }} </span>
+                </div>
+                <div class="no-desc-container" *ngIf="!item.HasDescription" >No description available.</div>
+              </div>
+              <div class="action">
+                <button class="button" (click)="displayCurriculumDescription(item)">
+                  View Courses
+                </button>
+              </div>
+            </div>
+          </ngu-item>
+          <button class="prev-button"
+            NguCarouselPrev
+          >
+            <span class="material-icons">west</span>
+          </button>
+          <button class="next-button"
+            NguCarouselNext
+          >
+            <span class="material-icons">east</span>
+          </button>
+        </ngu-carousel>
+
+      </div>
+      <div *ngIf="featuredCurricula.length === 0" class="carousel-container no-data-container">
+        No featured curriculum this time.
+      </div>
+    </div>
+
+    <!-- Contact Us Area -->
+    <div class="card-item">
+      <div class="header">
+        Contact Us
+      </div>
+      <div class="body contact-us">
+        <div class="contact-text">
+          <div> Got questions, comments, or suggestions? </div>
+          <div> Contact: <a [href]="'mailto:'+supportEmailAddress"> {{supportName}} <u>{{supportEmailAddress}}</u> </a></div>
+        </div>
+        <button class="email-button" (click)="submitForm()">
+          <img class="icon wht icon-dxc communications-envelope">
+          Submit Feedback
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="pageIsLoading" class="loading-page">
+  <app-loader></app-loader>
+</div>
