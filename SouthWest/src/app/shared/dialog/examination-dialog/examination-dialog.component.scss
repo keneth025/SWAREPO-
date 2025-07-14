@@ -1,0 +1,231 @@
+.stepper-content {
+  display: block !important;
+}
+
+
+// Exam Details Section
+.description-container {
+  min-height: 50px;
+}
+
+.status-badge {
+  height: 35px;
+}
+
+#exam-details {
+  margin-top        : 20px;
+  display           : grid;
+  grid-auto-flow    : column;
+  grid-auto-columns : 1fr;
+
+  align-items       : center;
+  justify-content   : center;
+
+  section {
+
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    justify-content : center;
+
+    div {
+      padding         : 8px 15px;
+
+      display         : flex;
+      flex-direction  : row;
+      align-items     : center;
+      justify-content : center;
+
+      font-size       : var(--font-lg);
+      line-height     : var(--linespace-lg);
+      letter-spacing  : var(--no-char-spacing);
+
+      background-color: #f4f4f4;
+      border-radius   : 5px;
+
+      &#passing-score {
+        background-color: #6cc24a26;
+        color           : var(--onecaplite-lightgreen);
+      }
+
+
+      span {
+        margin-left : 20px;
+      }
+    }
+  }
+
+}
+
+#add-exam {
+  margin: 30px 0px;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+#courses-related {
+  #label {
+    box-sizing: border-box;
+    position  : sticky;
+    padding   : 20px 15px;
+    top       : -1px;
+    z-index   : 2;
+    background-color: var(--onecaplite-white);
+  }
+
+  #course-list {
+    padding-left: 15px;
+
+    #course-table.onecap-table {
+      .table-row {
+        grid-template-columns: 3fr 2fr;
+        .section.details {
+          grid-template-columns: max-content 1fr 1fr;
+        }
+      }
+    }
+  }
+
+  #no-data-message {
+    margin-left     : 15px;
+    box-sizing      : border-box;
+    background-color: rgba($color: #d9d9d9, $alpha: 0.25);
+    border-radius   : 5px;
+    height          : 75px;
+
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+
+    font-size       : var(--font-sm);
+    color           : var(--onecaplite-purple);
+  }
+}
+
+.table-area {
+  .table-row {
+    &:first-of-type {
+      border-top: solid var(--onecaplite-darkwhite) 1px;
+    }
+  }
+}
+
+
+// Exam Proper Section
+
+#question-area, #question-list {
+  margin: 0px 20px;
+}
+
+#question-list {
+  display : grid;
+  gap     : 20px;
+}
+
+#question-index {
+  color           : var(--onecaplite-purple);
+
+  font-weight     : bold;
+  font-size       : var(--font-md);
+  line-height     : var(--linespace-md);
+  letter-spacing  : var(--no-char-spacing);
+
+  margin-bottom   : 30px;
+}
+
+#question-item {
+
+  font-size       : var(--font-md);
+  line-height     : var(--linespace-md);
+  letter-spacing  : var(--no-char-spacing);
+
+  .question-title {
+    font-size     : inherit;
+    line-height   : inherit;
+    letter-spacing: inherit;
+
+    margin-bottom : 5px;
+  }
+
+  .answers-container {
+    font-size     : inherit;
+    line-height   : inherit;
+    letter-spacing: inherit;
+
+    background-color  : rgba($color: #d9d9d9, $alpha: 0.25);
+    box-sizing        : border-box;
+    padding           : 15px;
+
+    display           : grid;
+    grid-auto-flow    : row;
+    grid-auto-rows    : 1fr;
+    gap               : 20px;
+
+  }
+
+}
+
+.result-container {
+  display         : flex;
+  flex-direction  : column;
+  align-items     : center;
+  justify-content : center;
+  gap             : 30px;
+
+  .score-card-container {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    border-radius   : 8px;
+    box-sizing      : border-box;
+    .score-card {
+      display               : grid;
+      grid-template-columns : 1fr 1fr;
+      gap                   : 15px;
+
+      .value {
+        text-align: center;
+
+        &.failed-score {
+          color: var(--onecaplite-red);
+        }
+      }
+    }
+  }
+
+  &#passed {
+    height: 100%;
+    width : 100%;
+
+    .message {
+      font-weight : bold;
+      font-size   : 30px;
+      line-height : 34px;
+    }
+
+    .score-card-container {
+      font-size         : 24px;
+      width             : 350px;
+      height            : 117px;
+      background-color  : rgba($color: #6cc24a, $alpha: 0.15);
+      color             : var(--onecaplite-lightgreen);
+    }
+  }
+
+
+  &#failed {
+
+    .message {
+      font-size : var(--font-sm);
+    }
+
+    .score-card-container {
+      font-size         : 16px;
+      height            : 75px;
+      width             : 225px;
+      background-color  : rgba($color: #9f000f, $alpha: 0.15);
+    }
+
+  }
+}

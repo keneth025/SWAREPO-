@@ -1,0 +1,42 @@
+<button class="close-btn" matDialogClose>
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  {{ item?.Title || '(No Course)' }}
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body">
+  <ng-container *ngIf="!dialogIsLoading">
+    <div class="content-container">
+      <form class="rating-form" [formGroup]="itemRatingFrm">
+        <div class="rate-form">
+          <label class="form-header"> Rate this course </label>
+          <div class="rate-container">
+            <app-star-rating [showValues]="true" formControlName="Rating"></app-star-rating>
+          </div>
+        </div>
+        <div class="review-form">
+          <label>Write a review</label>
+          <textarea formControlName="Review"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="action-container">
+      <button class="onecap-btn" matDialogClose>
+        Cancel
+      </button>
+      <button class="onecap-btn accent-2" [disabled]="itemRatingFrm.invalid" (click)="save()">
+        Submit
+      </button>
+    </div>
+  </ng-container>
+  <div class="dialog-loader" *ngIf="dialogIsLoading">
+    <app-loader></app-loader>
+  </div>
+</section>
+<!-- #endregion -->
+

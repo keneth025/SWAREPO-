@@ -1,0 +1,69 @@
+<button class="close-btn" matDialogClose>
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  {{ item?.Title || '(No Course)' }}
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body">
+  <ng-container *ngIf="!dialogIsLoading">
+    <div class="content-container">
+      <div class="rating-container">
+        <label> Overall Rating </label>
+        <span class="overall-rating-label"> {{ totalRating | number : '1.1' }}  </span>
+        <app-star-rating [(ngModel)]="totalRating" [viewOnly]="true"></app-star-rating>
+        <div class="rating-count" *ngIf="reviewList.value.length > 0;else noRating">
+          {{ reviewList.value.length }} Ratings
+        </div>
+        <ng-template #noRating>
+          <div> No ratings. </div>
+        </ng-template>
+      </div>
+
+      <div class="reviews-container">
+        <div class="headers">
+          <label>Reviews</label>
+          <div class="onecap-input-form row-form">
+            <label>Sort By:</label>
+            <div class="select-container">
+              <mat-select
+                [panelClass]="'onecaplite-option-container'"
+                [disableOptionCentering]="true"
+                [placeholder]="'-'"
+                [formControl]="sortingOption"
+              >
+                <mat-option [value]="SortingOptions.Date"> {{ SortingOptions.Date }} </mat-option>
+                <mat-option [value]="SortingOptions.LowestToHighest"> {{ SortingOptions.LowestToHighest }} </mat-option>
+                <mat-option [value]="SortingOptions.HighestToLowest"> {{ SortingOptions.HighestToLowest }} </mat-option>
+              </mat-select>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="(sortedReviewList|async) as sortedList">
+          <div class="list" *ngIf="sortedList.length > 0">
+            <div class="review-item" *ngFor="let item of sortedList" >
+              <div class="rating-area">
+                <label>Rating:</label>
+                <span class="rate-value"> {{ item.Rating | number : '1.1' }} </span>
+              </div>
+              <div class="date-area"> {{ item.DateModified }} </div>
+              <div class="review-area"> {{ item.Review }} </div>
+            </div>
+          </div>
+          <div class="no-value" *ngIf="sortedList.length === 0"> No reviews available. </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </ng-container>
+  <div class="dialog-loader" *ngIf="dialogIsLoading">
+    <app-loader></app-loader>
+  </div>
+</section>
+<!-- #endregion -->
+

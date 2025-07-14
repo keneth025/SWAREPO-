@@ -1,0 +1,138 @@
+<div class="page-container">
+
+  <section class="page-header">
+    <div class="page-title"> My Course List </div>
+  </section>
+
+  <section class="page-body" *ngIf="!PageIsLoading">
+
+    <div id="course-action">
+      <div class="onecap-group-btn">
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === -1) }"
+          (click)="StatusFilterForm.setValue(-1)"
+        > All </button>
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === 0) }"
+          (click)="StatusFilterForm.setValue(0)"
+        > Pending </button>
+        <button class="btn"
+          [ngClass]="{ 'active': (StatusFilterForm.value === 1) }"
+          (click)="StatusFilterForm.setValue(1)"
+        > Completed </button>
+      </div>
+
+      <button class="onecap-outline-btn accent-2"
+        (click)="exportReport()"
+        [disabled]="PageIsLoading"
+      >
+        <div class="button-wrapper">
+          <img class="icon icon-dxc export accent-2" />
+          Export
+        </div>
+      </button>
+    </div>
+
+    <div class="card" *ngIf="(FilteredList | async) as ItemList">
+
+      <div class="onecap-table course">
+        <div class="table-header">
+
+          <div class="section"></div>
+
+          <div class="section details">
+            <div class="col-name">Course Title</div>
+            <div class="col-name">Curriculum</div>
+            <div class="col-name action">Action</div>
+          </div>
+
+          <div class="section">
+            <div class="col-name">Status</div>
+            <div class="col-name">Completion Date</div>
+            <div class="col-name action">Course Duration</div>
+          </div>
+
+          <div class="section"></div>
+
+        </div>
+
+        <div class="table-row" *ngFor="let item of ItemList">
+
+          <div class="section">
+            <button class="onecap-icon-btn" (click)="moreInfoCourse(item)">
+              <span class="material-icons">info_outline</span>
+            </button>
+          </div>
+
+          <div class="section details">
+            <!-- Course Title -->
+            <div class="col-name">
+              {{ item?.Title || '(Blank)' }}
+            </div>
+
+            <!-- Curriculum Titles -->
+            <div class="col-name">
+              <div class="list">
+                <div *ngFor="let curriculumName of item.CurriculumNameArr">
+                  {{ curriculumName }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Action -->
+            <div class="col-name">
+              <button class="onecap-btn primary"
+                (click)="launchCourse(item)"
+              > Launch </button>
+            </div>
+
+          </div>
+
+          <div class="section">
+
+            <!-- Course Status -->
+            <div class="col-name">
+              <div class="status-badge"
+                [ngClass]="{
+                  'completed': (item.Status === CourseStatus.Completed),
+                  'pending': (item.Status === CourseStatus.Pending),
+                  'not-started': (item.Status === CourseStatus.NotRegistered)
+                }"
+              >
+                {{ item.Status }}
+              </div>
+            </div>
+
+            <!-- Date Modified -->
+            <div class="col-name"> {{ item.Status === CourseStatus.Completed ? item.CompletionDate : '' }} </div>
+
+            <div class="col-name"> {{ item.Duration }} </div>
+
+          </div>
+
+          <div class="section">
+            <button id="more-info" class="onecap-icon-btn" [matMenuTriggerFor]="courseMenu">
+              <span class="material-icons">more_horiz</span>
+            </button>
+            <mat-menu #courseMenu="matMenu">
+              <button mat-menu-item (click)="moreInfoCourse(item)">More information</button>
+              <button mat-menu-item (click)="copyToClipBoard(item.Title)">Copy Link</button>
+              <button mat-menu-item (click)="reportProblem(item)" >Contact Us</button>
+            </mat-menu>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card-message"
+        *ngIf="ItemList.length === 0"
+      > No courses assigned. </div>
+    </div>
+
+  </section>
+
+  <section class="page-loader" *ngIf="PageIsLoading">
+    <app-loader></app-loader>
+  </section>
+
+</div>

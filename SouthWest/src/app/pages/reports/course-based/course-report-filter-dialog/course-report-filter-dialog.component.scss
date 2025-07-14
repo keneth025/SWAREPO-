@@ -1,0 +1,68 @@
+:host {
+  grid-template-rows: max-content 1fr;
+  gap: 20px;
+}
+
+.dialog-header {
+  text-align: center;
+  .dialog-title {
+    font-size: var(--font-lg);
+  }
+  .sub-title {
+    font-weight: normal;
+  }
+}
+
+.vl {
+  width: 0px;
+  border-left: 1px solid;
+}
+
+.dialog-body {
+  gap: 20px;
+}
+
+.filters {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr max-content 1fr;
+  .column {
+    display: grid;
+    grid-auto-rows: max-content;
+    gap: 10px;
+  }
+}
+
+
+.date-filter {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.notes {
+  background-color: rgba($color: #d9d9d9, $alpha: 0.25);
+  padding         : 8px 15px;
+  border-radius   : 8px;
+
+  & > .header {
+    color           : var(--onecaplite-black);
+    font-size       : var(--font-xs);
+    line-height     : var(--linespace-xs);
+    letter-spacing  : var(--no-char-spacing);
+    font-weight     : bold;
+  }
+
+  & > .body {
+    margin-top      : 5px;
+    color           : var(--onecaplite-black);
+    font-size       : var(--font-sm);
+    line-height     : var(--linespace-sm);
+    letter-spacing  : var(--no-char-spacing);
+  }
+}
+
+.dialog-action {
+  display: grid;
+  justify-content: center;
+}

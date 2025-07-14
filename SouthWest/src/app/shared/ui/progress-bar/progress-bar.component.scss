@@ -1,0 +1,28 @@
+.progress-bar-container {
+  box-sizing        : border-box;
+  border            : 1px solid var(--onecaplite-darkwhite);
+  background-color  : var(--onecaplite-white);
+  overflow          : hidden;
+  height            : inherit;
+  width             : inherit;
+  position          : relative;
+  min-height        : 20px;
+  min-width         : 60px;
+
+  .percentage-acquired {
+    background-color  : var(--onecaplite-blue);
+    height            : inherit;
+    min-height        : inherit;
+    transition        : ease-out width 0.25s;
+  }
+
+  .percentage-acquired-vertical {
+    background-color  : var(--onecaplite-blue);
+    width             : inherit;
+    min-width         : inherit;
+    position          : absolute;
+    bottom            : 0px;
+    transition        : ease-out height 0.25s;
+  }
+
+}

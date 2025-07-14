@@ -1,0 +1,147 @@
+mat-drawer-container {
+  height: 100%;
+  background-color: transparent;
+}
+
+section#top-bar {
+  display : none;
+  position: fixed;
+  top     : 0px;
+  height  : 40px;
+  width   : 100%;
+  z-index : 1;
+
+  background  : #F8F7F7 0% 0% no-repeat padding-box;
+  box-shadow  : 2px 3px 6px #00000029;
+  box-sizing  : border-box;
+
+  flex-direction  : row;
+  justify-content : flex-start;
+  align-items     : center;
+}
+
+button.icon-button {
+  border          : none;
+  background-color: transparent;
+  display         : inline-flex;
+  flex-direction  : row;
+  align-items     : center;
+  justify-content : center;
+  height          : 30px;
+  width           : 30px;
+  box-sizing      : border-box;
+  cursor          : pointer;
+
+  &.floating {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+}
+
+#onecap-navigation {
+
+
+  #profile-section {
+    display       : block;
+    padding       : 15px;
+    border-bottom : 1px solid var(--onecaplite-darkwhite);
+
+    #profile-area {
+      cursor                : pointer;
+      display               : grid;
+      grid-template-columns : auto 1fr;
+      gap                   : 5px;
+      align-items           : center;
+      font-size             : var(--font-sm);
+
+      #image-holder {
+        cursor        : inherit;
+        height        : 40px;
+        width         : 40px;
+        overflow      : hidden;
+        border        : 0.5px solid var(--onecaplite-lightgray);
+        border-radius : 50%;
+
+        display         : flex;
+        flex-direction  : row;
+        align-items     : center;
+        justify-content : center;
+
+        #img-place-holder {
+          cursor          : inherit;
+          height          : inherit;
+          width           : inherit;
+          display         : flex;
+          flex-direction  : row;
+          align-items     : center;
+          justify-content : center;
+
+          font-size       : var(--font-lg);
+          font-weight     : lighter;
+
+          background-color: var(--onecaplite-purple);
+          color           : var(--onecaplite-white);
+        }
+
+        img {
+          height    : inherit;
+          width     : inherit;
+          object-fit: fill;
+        }
+      }
+
+      #name-holder {
+        cursor  : inherit;
+        color   : var(--onecaplite-purple);
+      }
+
+      &:hover {
+        #name-holder {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  #navigation-section {
+    flex-grow : 1;
+    // padding   : 10px 5px;
+    overflow  : auto;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      border-left: 1px solid var(--onecaplite-darkwhite);
+    }
+
+    &::-webkit-scrollbar-track {
+      border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--onecaplite-darkwhite);
+      border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--onecaplite-lightgray);
+    }
+  }
+
+}
+
+section#content-container {
+  width       : 100%;
+  height      : 100%;
+}
+
+@media only screen and (max-width: 949px) {
+  section#top-bar {
+    display: inline-flex;
+  }
+
+  section#content-container {
+    padding-top : 40px;
+    margin-left : 0px;
+  }
+}

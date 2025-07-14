@@ -1,0 +1,25 @@
+<section class="dialog-body">
+  <div>
+    Are you sure you want to <span class="onecap-lbl error" >delete</span>
+  </div>
+  <div class="item-name">
+    <b> {{ data.itemName }} ? </b>
+  </div>
+  <div>
+    This action cannot be undone.
+  </div>
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Footer -->
+<section class="dialog-action">
+  <button
+    class="onecap-outline-btn accent-2"
+    (click)="dialogRef.close(false)"
+  > No </button>
+  <button
+    class="onecap-btn error"
+    (click)="dialogRef.close(true)"
+  > Yes </button>
+</section>
+<!-- #endregion Dialog Footer -->

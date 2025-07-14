@@ -1,0 +1,19 @@
+#filters {
+  display               : grid;
+  grid-template-columns : repeat(4, 1fr);
+  align-items           : center;
+  gap                   : 10px;
+}
+
+#actions {
+  display : grid;
+  gap     : 10px;
+  grid-auto-flow  : column;
+  justify-content : flex-end;
+}
+
+#exam-table {
+  .table-header, .table-row {
+    grid-template-columns: 1fr 175px;
+  }
+}

@@ -1,0 +1,211 @@
+<button class="close-btn" (click)="dialogRef.close(false)">
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  <div class="dialog-title">
+    Exam Completion Report Filters
+  </div>
+  <div class="sub-title">
+    Please select filters to generate report.
+  </div>
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body">
+  <div class="filters" style="grid-template-columns: 1fr max-content 1fr;">
+
+    <div class="column" style="order: 1">
+
+      <div class="onecap-input-form">
+        <label>Employee Name</label>
+        <div class="input-container">
+          <input type="text"
+            [formControl]="selectedEmployeeName"
+            placeholder="Search by name or email"
+          />
+        </div>
+      </div>
+
+      <!-- Manager -->
+      <div class="onecap-input-form">
+        <label>Manager</label>
+        <div class="select-container">
+          <mat-select
+            [panelClass]="'onecap-option-container'"
+            placeholder="All People Managers"
+            [formControl]="selectedManager"
+            (closed)="ManagerSearchFilter.setValue('')"
+            #managerSelect
+            multiple
+          >
+            <div class="search-filter">
+              <span class="material-icons">search</span>
+              <input
+                (keydown)="$event.stopPropagation()"
+                [formControl]="ManagerSearchFilter"
+                type="text"
+                placeholder="Enter key words"
+              >
+            </div>
+            <ng-container *ngIf="FilteredManagerList | async as list" >
+              <div class="no-results-message" *ngIf="list.length === 0">
+                No people manager available.
+              </div>
+              <button
+                *ngIf="list.length > 0"
+                class="clear-filter"
+                (click)="selectedManager.setValue([]);managerSelect.close()"
+              >All People Managers</button>
+              <mat-option *ngFor="let item of list"
+                [value]="item.Id"
+              > {{ item.Title }} </mat-option>
+            </ng-container>
+          </mat-select>
+
+        </div>
+      </div>
+
+      <!-- Country -->
+      <div class="onecap-input-form">
+        <label>Country</label>
+        <div class="select-container">
+          <mat-select
+            [panelClass]="'onecap-option-container'"
+            placeholder="All Countries"
+            [formControl]="selectedCountry"
+            (closed)="CountrySearchFilter.setValue('')"
+            multiple
+            #countrySelect
+          >
+            <div class="search-filter">
+              <span class="material-icons">search</span>
+              <input
+                (keydown)="$event.stopPropagation()"
+                [formControl]="CountrySearchFilter"
+                type="text"
+                placeholder="Enter key words"
+              >
+            </div>
+            <ng-container *ngIf="FilteredCountryList | async as list">
+              <div class="no-results-message" *ngIf="list.length === 0">
+                No country available.
+              </div>
+              <button
+                *ngIf="list.length > 0"
+                class="clear-filter"
+                (click)="selectedCountry.setValue([]);countrySelect.close()"
+              >All Countries</button>
+              <mat-option *ngFor="let item of list"
+                [value]="item.Id"
+              > {{ item.Title }} </mat-option>
+            </ng-container>
+          </mat-select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="vl" style="order: 0"></div>
+
+    <div class="column" style="order: -1">
+
+      <!-- Curriculum -->
+      <div class="onecap-input-form">
+        <label>Curricula</label>
+        <div class="select-container">
+          <mat-select
+            [panelClass]="'onecap-option-container'"
+            placeholder="All Curricula"
+            #curriculumSelect
+            multiple
+            [formControl]="selectedCurriculum"
+            (closed)="CurriculumSearchFilter.setValue('')"
+          >
+            <div class="search-filter">
+              <span class="material-icons">search</span>
+              <input
+                (keydown)="$event.stopPropagation()"
+                [formControl]="CurriculumSearchFilter"
+                type="text"
+                placeholder="Enter key words"
+              >
+            </div>
+            <ng-container *ngIf="FilteredCurriculumList | async as list">
+              <div class="no-results-message" *ngIf="list.length === 0">
+                No curriculum available.
+              </div>
+              <button
+                *ngIf="list.length > 0"
+                class="clear-filter"
+                (click)="selectedCurriculum.setValue([]);curriculumSelect.close()"
+              >All Curricula</button>
+              <mat-option *ngFor="let item of list"
+                [value]="item.Id"
+              > {{ item.Title }} </mat-option>
+            </ng-container>
+          </mat-select>
+        </div>
+      </div>
+
+      <!-- Exams -->
+      <div class="onecap-input-form">
+        <label>Exams</label>
+        <div class="select-container">
+          <mat-select
+            [panelClass]="'onecap-option-container'"
+            placeholder="All Courses"
+            #courseSelect
+            multiple
+            [formControl]="selectedExam"
+            (closed)="ExamSearchFilter.setValue('')"
+          >
+            <div class="search-filter">
+              <span class="material-icons">search</span>
+              <input
+                (keydown)="$event.stopPropagation()"
+                [formControl]="ExamSearchFilter"
+                type="text"
+                placeholder="Enter key words"
+              >
+            </div>
+            <ng-container *ngIf="FilteredExamList | async as list">
+              <div class="no-results-message" *ngIf="list.length === 0">
+                No course available.
+              </div>
+              <button
+                *ngIf="list.length > 0"
+                class="clear-filter"
+                (click)="selectedExam.setValue([]);courseSelect.close()"
+              >All Exams</button>
+              <mat-option *ngFor="let item of list"
+                [value]="item.Id"
+              > {{ item.Title }} </mat-option>
+            </ng-container>
+          </mat-select>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="notes">
+    <div class="header"> Note: </div>
+    <div class="body">
+      Generating a report containing ALL exams, people managers, and countries will take some time. Please wait for the tool to load all the data.
+    </div>
+
+  </div>
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Footer -->
+<section class="dialog-action">
+  <button
+    class="onecap-btn primary"
+    (click)="generate()"
+  > Generate Report </button>
+</section>
+<!-- #endregion -->
