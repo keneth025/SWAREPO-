@@ -1,0 +1,68 @@
+<mat-drawer-container *ngIf="mobileObserver | async as mobile">
+  <button id="toggle-button" class="icon-button floating" (click)="snav.toggle()">
+    <span class="material-icons">sort</span>
+  </button>
+
+  <section id="top-bar" *ngIf="mobile.matches">
+    <button class="icon-button">
+      <span class="material-icons" (click)="drawer.toggle()">menu</span>
+    </button>
+  </section>
+
+  <mat-drawer id="onecap-navigation"
+    #drawer
+    [opened]="!mobile.matches"
+    [mode]="mobile.matches ? 'over' : 'side'"
+  >
+    <ng-container *ngIf="!isLoading">
+      <!-- #region Profile section -->
+      <button id="toggle-button" class="icon-button" (click)="drawer.toggle()">
+        <span class="material-icons">sort</span>
+      </button>
+
+      <section id="profile-section">
+        <div id="profile-area" (click)="goToProfilePage()">
+          <div id="image-holder">
+            <div id="img-place-holder"
+            >
+              {{ nameInitials || '' }}
+            </div>
+          </div>
+          <label id="name-holder">
+            {{ displayName || '' }}
+          </label>
+        </div>
+      </section>
+      <!-- #endregion -->
+
+      <!-- #region Navigation section -->
+      <section id="navigation-section">
+        <app-nav-list-item
+          *ngFor="let item of navItems"
+          [item]="item"
+        ></app-nav-list-item>
+      </section>
+      <!-- #endregion -->
+
+      <!-- #region Logo section -->
+      <section id="logo-section">
+
+        <div class="row">
+          <img id="client-logo" />
+          <label>  </label>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+          <img id="dxc-logo" />
+        </div>
+      </section>
+      <!-- #endregion -->
+    </ng-container>
+  </mat-drawer>
+
+  <section id="content-container">
+    <ng-content></ng-content>
+  </section>
+</mat-drawer-container>

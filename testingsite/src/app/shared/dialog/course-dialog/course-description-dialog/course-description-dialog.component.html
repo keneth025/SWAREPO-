@@ -1,0 +1,78 @@
+<button class="close-btn" matDialogClose>
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  {{ item?.Title || '(No Course)' }}
+</section>
+<!-- #endregion -->
+
+<!-- #region Dialog Body -->
+<section class="dialog-body">
+  <div class="duration-container">
+    Duration: {{ item?.DurationString || 'No duration' }}
+  </div>
+
+  <div class="curriculum-container">
+    {{ item?.CurriculumNames || 'No curriculum' }}
+  </div>
+
+  <div class="status-container">
+    <div class="status-badge"
+      [ngClass]="{
+        'completed': (item.Status === CourseStatus.Completed),
+        'pending': (item.Status === CourseStatus.Pending),
+        'not-started': (item.Status === CourseStatus.NotRegistered)
+      }"
+    > Status: {{ item?.Status || 'No Course' }} </div>
+  </div>
+
+  <div class="description-container">
+    <div class="content"
+      *ngIf="item?.HasDescription"
+      [innerHTML]="item.Description"
+    ></div>
+    <div id="no-description"
+      *ngIf="!item?.HasDescription"
+    > No description available. </div>
+  </div>
+
+  <div class="action-container">
+    <button class="onecap-btn primary"
+      *ngIf="!item?.IsClassroom"
+      (click)="launchCourse()"
+    >
+      Launch
+    </button>
+
+    <ng-container *ngIf="item?.IsClassroom">
+      <button class="onecap-btn completed light"
+        *ngIf="item.Status !== CourseStatus.Completed"
+        (click)="saveToMyCourse(true)"
+      >
+        <div class="button-wrapper">
+          Mark as Complete <span class="material-icons">task_alt</span>
+        </div>
+      </button>
+
+      <button class="onecap-btn completed light"
+        *ngIf="item.Status === CourseStatus.Completed"
+      >
+        Status: Completed
+      </button>
+
+    </ng-container>
+
+
+    <button class="onecap-outline-btn primary"
+      *ngIf="item?.Status === CourseStatus.NotRegistered"
+      (click)="saveToMyCourse()"
+    >
+      Add to My Courses
+    </button>
+  </div>
+
+</section>
+<!-- #endregion -->
+

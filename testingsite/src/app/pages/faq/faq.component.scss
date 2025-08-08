@@ -1,0 +1,66 @@
+.page-body {
+  display : grid;
+  gap     : 15px;
+}
+
+#filters.card {
+  display: grid;
+  grid-template-columns: 250px max-content;
+  justify-content: space-between;
+  & > .onecap-btn {
+    margin-top: 23px;
+  }
+}
+
+#item-headers-section {
+  display : grid;
+  column-gap  : 30px;
+  row-gap     : 15px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-auto-rows: 1fr;
+
+  button.header-button {
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 10px;
+    border: none;
+    background-color: var(--onecaplite-white);
+    color: var(--onecaplite-purple);
+  }
+}
+
+#items.card {
+  padding: 15px;
+  margin-top: 0px;
+}
+
+.section-item {
+  .item-header {
+    padding: 15px;
+    background-color: var(--onecaplite-purple);
+    color: var(--onecaplite-white);
+  }
+
+  mat-expansion-panel-header {
+    background-color: rgba($color: #5f249f, $alpha: 0.1);
+    color: var(--onecaplite-black);
+    &:hover {
+      background-color: rgba($color: #5f249f, $alpha: 0.1) !important;
+    }
+  }
+  mat-panel-description {
+    padding-top: 15px;
+    padding-left: 15px;
+    color: var(--onecaplite-black);
+  }
+}
+
+@media only screen and (max-width: 949px) {
+  .card#filters {
+    top: unset;
+  }
+
+  button.email-button {
+    justify-self: flex-start;
+  }
+}

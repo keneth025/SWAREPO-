@@ -1,0 +1,557 @@
+<button class="close-btn" (click)="closeDialog()">
+  <span class="material-icons">close</span>
+</button>
+
+<!-- #region Dialog Header -->
+<section class="dialog-header">
+  <div class="dialog-title"> {{ dialogTitle }} Curriculum </div>
+</section>
+<!-- #endregion -->
+
+
+<!-- #region Dialog Body -->
+
+<section class="dialog-body">
+  <mat-horizontal-stepper class="onecap-stepper"
+    #stepper
+    linear
+
+  >
+
+    <!-- #region Course Details -->
+    <mat-step label="Curriculum Details"
+      [completed]="FormDetails.valid"
+    >
+      <div class="stepper-loader" *ngIf="dialogIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div id="details-section" class="stepper-content"
+        [hidden]="dialogIsLoading"
+      >
+
+        <!-- Single Form -->
+        <section id="single-form"
+          [formGroup]="FormDetails"
+        >
+
+          <!-- Title -->
+          <div class="onecap-input-form"
+            [ngClass]="{ 'invalid': FormDetails.get('Title').invalid }"
+          >
+            <label> Curriculum Name<span class="required">*</span> </label>
+            <div class="input-container">
+              <input type="text"
+                formControlName="Title"
+              />
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="onecap-input-form">
+            <label> Curriculum Description </label>
+            <div class="editor-container">
+              <ckeditor
+                formControlName="Description"
+                [editor]="editor"
+                [config]="editorConfig"
+              ></ckeditor>
+              <div class="counter">
+                {{ DescriptionCount | async }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Owners -->
+          <div class="onecap-input-form"
+            [ngClass]="{
+              'invalid': FormDetails.get('Owners').invalid
+            }"
+            (focus)="inputOwner.focus()"
+            (click)="inputOwner.focus()"
+          >
+            <label>
+              Curriculum Owners<span class="required">*</span>
+              <div class="info-message">Search by name or email</div>
+            </label>
+
+            <div class="textarea-container">
+              <div class="item-list">
+                <div class="item-selection"
+                  *ngFor="let owner of FormDetails.get('Owners').value;let i = index"
+                >
+                  <button class="onecap-icon-btn delete"
+                    (click)="removeOwner(i)"
+                  >
+                    <span class="material-icons">clear</span>
+                  </button>
+                  <span>{{ owner.Title }}</span>
+                </div>
+              </div>
+              <input #inputOwner type="text"
+                [formControl]="OwnersControl"
+                [matAutocomplete]="auto"
+              >
+            </div>
+          </div>
+
+          <!-- Category -->
+          <div class="onecap-input-form"
+            [ngClass]="{ 'invalid': FormDetails.get('LearningCategory').invalid }"
+          >
+            <label> Category <span class="required">*</span> </label>
+            <div class="select-container">
+              <mat-select
+                [disableOptionCentering]="true"
+                [placeholder]="'-'"
+                formControlName="LearningCategory"
+              >
+                <mat-option [value]="null">-</mat-option>
+                <mat-option
+                  *ngFor="let item of (LearningCategoryList | async)"
+                  [value]="item"
+                >{{ item.Title }}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <!-- Sub-Category -->
+          <div class="onecap-input-form"
+            [ngClass]="{ 'invalid': FormDetails.get('LearningSubCategory').invalid }"
+          >
+            <label> Sub-category <span class="required">*</span> </label>
+            <div class="select-container">
+              <mat-select
+                [disableOptionCentering]="true"
+                [placeholder]="'-'"
+                formControlName="LearningSubCategory"
+              >
+                <mat-option [value]="null">-</mat-option>
+                <mat-option
+                  *ngFor="let item of (FilteredLearningSubCategoryList | async)"
+                  [value]="item"
+                >{{ item.Title }}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+      <div class="stepper-action">
+        <button class="onecap-link-btn accent-2"
+          [disabled]="FormDetails.invalid"
+          (click)="validateName(true)"
+        >
+          Skip Assigning Courses and Exams
+        </button>
+
+        <button class="onecap-btn accent-2"
+          (click)="validateName()"
+          [disabled]="FormDetails.invalid"
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </mat-step>
+    <!-- #endregion Curriculum Details -->
+
+    <!-- #region Assign Courses -->
+    <mat-step label="Assign Courses"
+      [optional]="true"
+    >
+      <div class="stepper-loader" *ngIf="coursesIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div class="stepper-content selection"
+        [hidden]="coursesIsLoading"
+      >
+        <section class="selection-section">
+          <div id="filter">
+            <div class="onecap-input-form">
+              <label>Course Name</label>
+              <div class="input-container">
+                <input type="text"
+                  placeholder="Search"
+                  [formControl]="CourseSearchFilter"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div id="selection-container">
+
+            <div class="selection-table selection" *ngIf="FilteredCourseList | async as list">
+              <div class="table-header">
+                <div></div>
+                <div class="col">
+                  Course Name
+                  <div class="tip">
+                    Click the add button to add a course
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-body">
+                <div class="table-row" *ngIf="list.length === 0">
+                  <span></span>
+                  <label class="onecap-lbl error">
+                    No course available.
+                  </label>
+                </div>
+                <div class="table-row"
+                  *ngFor="let item of list"
+                >
+                  <div>
+                    <button
+                      class="onecap-icon-btn accent-2"
+                      (click)="AssignedCourse.select(item)"
+                    >
+                      <span class="material-icons">add</span>
+                    </button>
+                  </div>
+                  <div class="col">
+                    {{ item.Title }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <span id="separator"></span>
+
+            <div class="selection-table selection drag-drop">
+              <div class="table-header">
+                <div></div>
+                <div class="col">
+                  Assigned Courses
+                  <div class="tip">
+                    Drag and drop the courses to arrange it
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-body"
+                cdkDropList
+                (cdkDropListDropped)="reorderItems(AssignedCourse, $event)"
+              >
+                <div class="table-row" *ngIf="AssignedCourse.isEmpty()">
+                  <span></span>
+                  <label class="onecap-lbl error">
+                    No course assigned.
+                  </label>
+                </div>
+
+                <div class="table-row selection"
+                  *ngFor="let item of AssignedCourse.selected; let i = index"
+                  cdkDrag
+                >
+                  <div> {{ i + 1 }} </div>
+                  <span class="material-icons drag-handle" cdkDragHandle>
+                    drag_indicator
+                  </span>
+                  <div class="col">
+                    {{ item.Title }}
+                  </div>
+                  <button class="onecap-icon-btn error"
+                    [disabled]="!item.IsOwner"
+                    (click)="AssignedCourse.deselect(item)"
+                  >
+                    <span class="material-icons">clear</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+      <div class="stepper-action">
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          matStepperNext
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </mat-step>
+    <!-- #endregion Assign Courses -->
+
+    <!-- #region Assign Exams -->
+    <mat-step label="Assign Exams"
+      [optional]="true"
+    >
+      <div class="stepper-loader" *ngIf="examsIsLoading">
+        <app-loader></app-loader>
+      </div>
+
+      <div class="stepper-content selection"
+        [hidden]="examsIsLoading"
+      >
+        <section class="selection-section">
+          <div id="filter">
+            <div class="onecap-input-form">
+              <label>Exam Name</label>
+              <div class="input-container">
+                <input type="text"
+                  placeholder="Search"
+                  [formControl]="ExamSearchFilter"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div id="selection-container">
+
+            <div class="selection-table selection" *ngIf="FilteredExamList | async as list">
+              <div class="table-header">
+                <div></div>
+                <div class="col">
+                  Exam Name
+                  <div class="tip">
+                    Click the add button to add an exam
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-body">
+                <div class="table-row" *ngIf="list.length === 0">
+                  <span></span>
+                  <label class="onecap-lbl error">
+                    No exam available.
+                  </label>
+                </div>
+
+                <div class="table-row"
+                  *ngFor="let item of list"
+                >
+                  <div>
+                    <button
+                      class="onecap-icon-btn accent-2"
+                      (click)="AssignedExam.select(item)"
+                    >+</button>
+                  </div>
+                  <div class="col">
+                    {{ item.Title }}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <span id="separator"></span>
+
+            <div class="selection-table selection drag-drop"
+            >
+              <div class="table-header">
+                <div></div>
+                <div class="col">
+                  Assigned Exams
+                  <div class="tip">
+                    Drag and drop the exams to arrange it
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-body"
+                cdkDropList
+                (cdkDropListDropped)="reorderItems(AssignedExam, $event)"
+              >
+                <div class="table-row" *ngIf="AssignedExam.isEmpty()">
+                  <span></span>
+                  <label class="onecap-lbl error">
+                    No exam assigned.
+                  </label>
+                </div>
+                <div class="table-row selection"
+                  *ngFor="let item of AssignedExam.selected;let i = index"
+                  cdkDrag
+                >
+                  <div class="index-number">
+                    {{ i + 1 }}
+                  </div>
+                  <span class="material-icons drag-handle" cdkDragHandle>
+                    drag_indicator
+                  </span>
+                  <div class="col">
+                    {{ item.Title }}
+                  </div>
+                  <button class="onecap-icon-btn error"
+                    (click)="AssignedExam.deselect(item)"
+                  >
+                    <span class="material-icons">clear</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+      <div class="stepper-action">
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          matStepperNext
+        >
+          <div class="button-wrapper">
+            Next <span class="material-icons">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </mat-step>
+    <!-- #endregion Assign Exams -->
+
+    <!-- #region Confirm Details -->
+    <mat-step label="Confirm Details">
+      <div class="stepper-content"
+        *ngIf="FormDetails.value as details"
+        [hidden]="FormDetails.invalid"
+      >
+        <div class="basic-form summary">
+          <div class="column">
+            <div class="field">
+              <label>Curriculum Name*</label>
+              <div> {{ details.Title }} </div>
+            </div>
+
+            <div class="field">
+              <label>Curriculum Description</label>
+              <div [innerHTML]="details.Description"></div>
+              <div *ngIf="(DescriptionCount | async) === 0">No description available.</div>
+            </div>
+
+            <div class="field">
+              <label>Curriculum Owner/s*</label>
+              <div class="list">
+                <div *ngFor="let item of details.Owners">
+                  {{ item.Title }}
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="column">
+
+            <div class="field">
+              <label>Category*</label>
+              <div> {{ details.LearningCategory? details.LearningCategory.Title : '' }} </div>
+            </div>
+
+            <div class="field">
+              <label>Sub-Category*</label>
+              <div> {{ details.LearningSubCategory? details.LearningSubCategory.Title : '' }} </div>
+            </div>
+
+
+
+          </div>
+
+        </div>
+
+        <section class="assigned-section">
+          <div class="basic-form summary">
+            <div class="column">
+
+              <div class="field" *ngIf="AssignedCourse as AssignedList">
+                <label>Assigned Courses</label>
+                <div class="list">
+                  <div class="onecap-lbl error" *ngIf="AssignedList.isEmpty()">
+                    No course assigned.
+                  </div>
+                  <div class="item" *ngFor="let item of AssignedList.selected; let i=index">
+                    <span class="index">{{ i + 1 }}</span>
+                    <div>
+                      {{ item.Title }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field" *ngIf="AssignedExam as AssignedList">
+                <label>Assigned Exam</label>
+                <div class="list">
+                  <div class="onecap-lbl error" *ngIf="AssignedList.isEmpty()">
+                    No exam assigned.
+                  </div>
+                  <div class="item" *ngFor="let item of AssignedList.selected; let i=index">
+                    <span class="index">{{ i + 1 }}</span>
+                    <div>
+                      {{ item.Title }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <div class="stepper-action">
+        <button class="onecap-outline-btn accent-2"
+          matStepperPrevious
+        >
+          <div class="button-wrapper">
+            <span class="material-icons">chevron_left</span> Previous
+          </div>
+        </button>
+        <button class="onecap-btn accent-2"
+          (click)="save()"
+        > Submit </button>
+      </div>
+    </mat-step>
+    <!-- #endregion -->
+
+    <ng-template
+      matStepperIcon="done"
+      let-index="index"
+      let-active="active"
+    > {{ index + 1 }} </ng-template>
+
+    <ng-template
+      matStepperIcon="edit"
+      let-index="index"
+      let-active="active"
+    > {{ index + 1 }} </ng-template>
+
+  </mat-horizontal-stepper>
+</section>
+<!-- #endregion -->
+
+<mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption [displayWith]="displayFn" (optionSelected)="addOwner($event.option.value)">
+  <mat-option *ngIf="IsSearchingUser" [disabled]="true">
+    <div class="flex align-items-center justify-content-center" >
+      <mat-spinner [diameter]="24"></mat-spinner>
+    </div>
+  </mat-option>
+  <ng-container *ngIf="!IsSearchingUser && (SearchUserList | async) as searchedUsers">
+    <mat-option [value]="profile" *ngFor="let profile of searchedUsers">
+      {{ profile.DisplayText }}
+    </mat-option>
+  </ng-container>
+</mat-autocomplete>
+

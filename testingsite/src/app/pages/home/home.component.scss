@@ -1,0 +1,617 @@
+::ng-deep {
+  &:root {
+    --home-announcement-height: 335px;
+    --home-announcement-width : 710px;
+
+    --home-feature-curricula-height : 160px;
+
+  }
+
+  ngu-carousel.curriculum-container .ngucarousel {
+    position: unset;
+  }
+}
+
+:host {
+  display         : grid;
+  justify-content : center;
+  padding         : 20px;
+  height          : 100%;
+}
+
+.top-row { margin-bottom   : 20px; }
+.top-row, .bottom-row {
+  display         : flex;
+  flex-direction  : row;
+  align-items     : stretch;
+  justify-content : center;
+}
+
+.card-item {
+  $width  : 290px;
+
+  /* Width */
+  width     : $width;
+  min-width : $width;
+  max-width : $width;
+
+  &.mandatory-trainings {
+    /* Height */
+    height    : var(--home-announcement-height);
+    min-height: var(--home-announcement-height);
+    max-height: var(--home-announcement-height);
+
+    > .body {
+      box-sizing      : border-box;
+      flex-grow       : 1;
+      overflow        : auto;
+      padding         : 15px;
+
+      &.no-data-container {
+        background-color: var(--onecaplite-darkwhite);
+        color           : var(--onecaplite-purple);
+
+        text-align      : center;
+        font-weight     : bold;
+        font-size       : var(--font-md);
+        line-height     : var(--linespace-md);
+        letter-spacing  : var(--no-char-spacing);
+
+        display         : flex;
+        flex-direction  : column;
+        align-items     : center;
+        justify-content : center;
+      }
+    }
+  }
+
+  margin-left   : 20px;
+  display       : flex;
+  flex-direction: column;
+  align-items   : stretch;
+
+  > .header {
+    font-size     : var(--font-lg);
+    color         : var(--onecaplite-black);
+    text-align    : left;
+    font-weight   : bold;
+    margin-bottom : 5px;
+  }
+
+  > .body {
+    font-size     : var(--font-md);
+    line-height   : var(--linespace-md);
+    letter-spacing: var(--no-char-spacing);
+
+    border-radius   : 12.5px;
+    background-color: var(--onecaplite-white);
+
+    &.contact-us {
+      /* Height */
+      box-sizing: border-box;
+      height    : var(--home-feature-curricula-height);
+      min-height: var(--home-feature-curricula-height);
+      max-height: var(--home-feature-curricula-height);
+
+      padding   : 10px;
+    }
+  }
+
+}
+
+
+/* #region Announcement Carousel */
+
+.carousel-announcement {
+  height  : var(--home-announcement-height);
+  width   : var(--home-announcement-width);
+
+  &.no-data-container {
+    background-color: var(--onecaplite-darkwhite);
+    color           : var(--onecaplite-purple);
+
+    text-align      : center;
+    font-weight     : bold;
+    font-size       : var(--font-md);
+    line-height     : var(--linespace-md);
+    letter-spacing  : var(--no-char-spacing);
+
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    justify-content : center;
+    border-radius   : 12.5px;
+  }
+}
+
+.announcement-carousel-item {
+  height          : var(--home-announcement-height);
+  width           : var(--home-announcement-width);
+  background-color: #606060;
+  background-size : cover !important;
+  border-radius   : 12.5px;
+
+  .announcement-container {
+    background-color  : rgba($color: #3453C4, $alpha: 0.9);
+    border-radius     : 0 15% 0 0;
+    min-width         : 375px;
+    max-width         : 375px;
+    min-height        : 310px;
+    max-height        : 310px;
+    margin-top        : 12px;
+    position          : absolute;
+    display           : grid;
+
+    > .content {
+      margin        : 18px 20px;
+      display       : flex;
+      flex-grow     : 1;
+      flex-direction: column;
+      align-items   : stretch;
+      color         : var(--onecaplite-white);
+
+      .header {
+        font-size     : var(--font-xl);
+        font-weight   : bold;
+        width         : 222px;
+        margin-bottom : 18px;
+      }
+
+      .description {
+        font-size     : var(--font-md);
+        height        : 56px;
+        margin-bottom : 10px;
+        overflow      : hidden;
+
+        display           : -webkit-box;
+        display           : -moz-box;
+        line-clamp        : 3;
+        -webkit-line-clamp: 3;
+        -moz-line-clamp   : 3;
+        box-orient        : vertical;
+        -webkit-box-orient: vertical;
+        -moz-box-orient   : vertical;
+
+        overflow          : hidden;
+        text-overflow     : ellipsis;
+      }
+
+      .link {
+        color           : inherit;
+        font-size       : var(--font-xs);
+        text-decoration : none;
+        font-weight     : bold;
+        align-self      : flex-start;
+        &:hover { text-decoration : underline; }
+      }
+
+      .spacer { flex-grow: 1; }
+
+      .footer {
+        justify-self  : flex-end;
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+
+        .page-dot {
+          flex-grow     : 1;
+          display       : flex;
+          flex-direction: row;
+          align-items   : center;
+          margin-right  : 100px;
+
+          .dot {
+            $dot-size         : 10px;
+            min-height        : $dot-size;
+            max-height        : $dot-size;
+            height            : $dot-size;
+            min-width         : $dot-size;
+            max-width         : $dot-size;
+            width             : $dot-size;
+            background-color  : var(--onecaplite-white);
+            border-radius     : 50%;
+            margin-right      : 5px;
+            cursor            : pointer;
+            &.active {
+              background-color: var(--onecaplite-gray);
+            }
+          }
+        }
+
+        .next-page {
+          display       : flex;
+          flex-direction: row;
+          align-items   : center;
+          justify-self  : flex-end;
+          font-weight   : bold;
+
+          font-size     : var(--font-xs);
+          border-bottom : solid 0.5px transparent;
+          cursor        : pointer;
+
+          .round-button {
+            background-color  : var(--onecaplite-white);
+            color             : var(--onecaplite-purple);
+
+            $button-size  : 30px;
+            min-height    : $button-size;
+            max-height    : $button-size;
+            height        : $button-size;
+            min-width     : $button-size;
+            max-width     : $button-size;
+            width         : $button-size;
+
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            border-radius   : 50%;
+            margin-left     : 10px;
+          }
+
+          .icon {
+            color     : inherit;
+            font-size : 15px;
+            height    : 15px;
+            width     : 15px;
+          }
+
+          &:hover {
+            div { text-decoration: underline; }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* #endregion */
+
+
+/* #region Mandatory Trainings */
+.course-item {
+  display         : flex;
+  flex-direction  : column;
+  cursor          : pointer;
+
+  border-bottom   : 1px solid var(--onecaplite-darkwhite);
+  padding-bottom  : 25px;
+  margin-bottom   : 10px;
+
+  &:last-of-type {
+    border-bottom   : none;
+    padding-bottom  : 0px;
+    margin-bottom   : 0px;
+  }
+
+  .course-title {
+    font-size       : var(--font-md);
+    line-height     : var(--linespace-md);
+    letter-spacing  : var(--no-char-spacing);
+    text-decoration : underline;
+  }
+
+  .label-due, .label-status {
+    font-size       : var(--font-sm);
+    line-height     : var(--linespace-sm);
+    letter-spacing  : var(--no-char-spacing);
+  }
+
+  .label-due { margin: 5px 0px; }
+
+  .label-status {
+    width           : 125px;
+    height          : 24px;
+    border-radius   : 8px;
+
+    display         : flex;
+    flex-direction  : row;
+    align-items     : center;
+    justify-content : center;
+    background-color: var(--onecaplite-darkwhite);
+    &.complete {
+      background-color: var(--onecaplite-lightgreen);
+      color           : var(--onecaplite-white);
+    }
+
+    &.pending {
+      background-color: #ffcd00;
+    }
+  }
+}
+
+/* #endregion */
+
+/* #region Carousel Curriculum */
+.carousel-curriculum {
+  display       : flex;
+  flex-direction: column;
+  align-items   : stretch;
+  width         : var(--home-announcement-width);
+
+  .header {
+    font-size     : var(--font-lg);
+    color         : var(--onecaplite-black);
+    text-align    : left;
+    font-weight   : bold;
+    margin-bottom : 5px;
+  }
+
+  .carousel-container {
+    position: relative;
+
+    background-color: transparent;
+    border-radius   : 15px;
+
+    height    : var(--home-feature-curricula-height);
+    min-height: var(--home-feature-curricula-height);
+    max-height: var(--home-feature-curricula-height);
+
+    &.no-data-container {
+      background-color: var(--onecaplite-darkwhite);
+      color           : var(--onecaplite-purple);
+
+      text-align      : center;
+      font-weight     : bold;
+      font-size       : var(--font-md);
+      line-height     : var(--linespace-md);
+      letter-spacing  : var(--no-char-spacing);
+
+      display         : flex;
+      flex-direction  : column;
+      align-items     : center;
+      justify-content : center;
+    }
+
+    ngu-carousel.curriculum-container {
+      height    : inherit;
+      min-height: inherit;
+      max-height: inherit;
+
+      width     : inherit;
+      min-width : inherit;
+      max-width : inherit;
+
+      box-sizing: border-box;
+      padding   : 0px;
+    }
+
+    .curriculum-item {
+      box-sizing: border-box;
+
+      $width    : 230px;
+      min-width : $width;
+      width     : $width;
+      max-width : $width;
+
+      $height   : var(--home-feature-curricula-height);
+      min-height: $height;
+      height    : $height;
+      max-height: $height;
+
+      display         : flex;
+      flex-direction  : column;
+      align-items     : stretch;
+
+      padding   : 10px;
+
+      background-color: var(--onecaplite-white);
+      height          : var(--home-feature-curricula-height);
+      border-radius   : 10px;
+
+      > .title {
+        $header-height: 40px;
+        min-height      : $header-height;
+        height          : $header-height;
+        max-height      : $header-height;
+
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
+        margin-bottom   : 5px;
+
+        font-size       : var(--font-md);
+        line-height     : var(--linespace-md);
+        letter-spacing  : var(--no-char-spacing);
+        font-weight     : bold;
+
+        .overflow-text {
+          display           : -webkit-box;
+          display           : -moz-box;
+          line-clamp        : 2;
+          -webkit-line-clamp: 2;
+          -moz-line-clamp   : 2;
+          box-orient        : vertical;
+          -webkit-box-orient: vertical;
+          -moz-box-orient   : vertical;
+
+          text-align        : center;
+          max-height        : inherit;
+          overflow          : hidden;
+          text-overflow     : ellipsis;
+          cursor            : pointer;
+
+          :hover {
+            text-decoration : underline;
+          }
+        }
+      }
+
+      > .description {
+        flex-grow : 1;
+
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
+        margin-bottom   : 5px;
+
+        .desc-container {
+          $height   : 60px;
+          min-height: $height;
+          height    : $height;
+          max-height: $height;
+
+          .overflow-text {
+            cursor          : pointer;
+            font-size       : var(--font-sm);
+            line-height     : var(--linespace-lg);
+            letter-spacing  : var(--no-char-spacing);
+
+            display           : -webkit-box;
+            display           : -moz-box;
+            line-clamp        : 3;
+            -webkit-line-clamp: 3;
+            -moz-line-clamp   : 3;
+            box-orient        : vertical;
+            -webkit-box-orient: vertical;
+            -moz-box-orient   : vertical;
+
+            text-align        : center;
+            max-height        : inherit;
+            overflow          : hidden;
+            text-overflow     : ellipsis;
+
+            &:hover {
+              text-decoration : underline;
+            }
+          }
+        }
+
+        .no-desc-container {
+          font-size       : var(--font-sm);
+          line-height     : var(--linespace-lg);
+          letter-spacing  : var(--no-char-spacing);
+        }
+
+      }
+
+      > .action {
+        display         : flex;
+        flex-direction  : row;
+        align-items     : center;
+        justify-content : center;
+        .button {
+          cursor          : pointer;
+          height          : 24px;
+          width           : 128px;
+          border          : none;
+          border-radius   : 8px;
+
+          background-color: var(--onecaplite-orange);
+          color           : var(--onecaplite-white);
+
+          font-size       : var(--font-sm);
+          line-height     : var(--linespace-sm);
+          letter-spacing  : var(--no-char-spacing);
+        }
+      }
+
+    }
+
+    ngu-item {
+      padding         : 0px;
+      box-sizing      : border-box;
+      display         : inline-flex;
+      flex-direction  : column;
+      align-items     : center;
+      justify-content : center;
+
+      &:nth-child(3n + 1) {
+        align-items: flex-start;
+      }
+
+      &:nth-child(3n + 2) {
+        .curriculum-item .action .button {
+          background-color: var(--onecaplite-lightblue);
+        }
+      }
+
+      &:nth-child(3n + 3) {
+        align-items: flex-end;
+        .curriculum-item .action .button {
+          background-color: var(--onecaplite-lightgreen);
+        }
+      }
+    }
+
+
+
+
+    $size: 25px;
+    .prev-button,
+    .next-button {
+      z-index   : 3;
+      height    : $size;
+      width     : $size;
+      position  : absolute;
+      top       : calc(50% - #{$size / 2});
+      cursor    : pointer;
+
+      user-select     : none;
+
+      background    : var(--onecaplite-purple);
+      border        : solid 1px var(--onecaplite-purple);
+      color         : var(--onecaplite-white);
+      border-radius : 50%;
+
+      .material-icons {
+        height          : 100%;
+        width           : 100%;
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
+        font-size       : 15px;
+      }
+    }
+
+    .next-button { right: -#{$size / 2}; }
+    .prev-button { left: -#{$size / 2}; }
+  }
+}
+
+/* #endregion */
+
+/* #region Contact Us */
+.contact-us {
+  display         : flex;
+  flex-direction  : column;
+  align-items     : center;
+  justify-content : center;
+
+  .contact-text, button.email-button {
+    font-size       : var(--font-sm);
+    line-height     : var(--linespace-lg);
+    letter-spacing  : var(--no-char-spacing);
+    text-align      : center;
+  }
+
+  .contact-text {
+    margin-bottom: 5px;
+    a {
+      color           : var(--onecaplite-blue);
+      text-decoration : none;
+    }
+  }
+
+  button.email-button {
+    background-color: var(--onecaplite-purple);
+    color           : var(--onecaplite-white);
+
+    cursor      : pointer;
+    border      : none;
+    width       : 176px;
+    height      : 36px;
+
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    border-radius   : 8px;
+    .icon {
+      $icon-size    : 16px;
+      margin-right  : 8px;
+      height        : $icon-size;
+      width         : $icon-size;
+    }
+  }
+
+}
+/* #endregion */
