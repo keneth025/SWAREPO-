@@ -1,0 +1,5 @@
+{
+  "siteUrl": "https://dxcportal.sharepoint.com/sites/southwestKnowledgeCentral",
+  "strategy": "OnDemandCredentials",
+  "ondemand": true
+}

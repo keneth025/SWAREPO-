@@ -59,7 +59,19 @@ export class EmployeeProfileComponent implements OnInit {
     this.OrgLvl1Name = orgLvl1?.Title || '(Blank)';
     this.OrgLvl2Name = orgLvl2?.Title || '(Blank)';
     this.PageIsLoading = false;
-    this.Roles = await this.userRoleService.getAll();
+    // Fetch roles explicitly for the logged-in user to avoid any leftover ActiveUserId state
+    const allRoles = await this.userRoleService.getRolesByUserId(this.accountService.account.Id);
+    // Keep only the latest record per RoleId (defensive de-dupe if historical rows exist)
+    const latestByRoleId = new Map<number, UserRole>();
+    for (const r of allRoles) {
+      const prev = latestByRoleId.get(r.RoleId);
+      if (!prev || (r.Modified && prev.Modified && r.Modified.getTime() > prev.Modified.getTime())) {
+        latestByRoleId.set(r.RoleId, r);
+      } else if (!prev) {
+        latestByRoleId.set(r.RoleId, r);
+      }
+    }
+    this.Roles = Array.from(latestByRoleId.values()).sort((a, b) => (a.RoleName || '').localeCompare(b.RoleName || ''));
     this.RolesLoading = false;
   }
 
